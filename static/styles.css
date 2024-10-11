@@ -1,0 +1,95 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #444;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: 60%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.results {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.result-item {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.similarity {
+    color: #666;
+    font-size: 14px;
+}
+
+.doc-content {
+    margin-top: 10px;
+    line-height: 1.5;
+    max-height: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.doc-content::before {
+    content: "“";
+    font-size: 20px;
+    vertical-align: top;
+    color: #888;
+}
+
+.doc-content::after {
+    content: "”";
+    font-size: 20px;
+    vertical-align: bottom;
+    color: #888;
+}
+
+#similarityChart {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+}

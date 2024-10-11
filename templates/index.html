@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Retrieval with LSA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1><i class="fas fa-search"></i>LSA Search Engine</h1>
+    <form method="post">
+        <input type="text" name="query" placeholder="Enter your query..." required>
+        <button type="submit"><i class="fas fa-search"></i> Search</button>
+    </form>
+
+    {% if results %}
+        <div class="results">
+            <h2>Top 5 Documents for: "{{ query }}"</h2>
+            {% for index, doc, score in results %}
+                <div class="result-item">
+                    <div class="similarity">
+                        <strong>Document {{ index + 1 }} (ID: {{ index }}):</strong> Similarity: {{ score | round(3) }}
+                    </div>
+                    <div class="doc-content">
+                        {{ doc | safe }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="similarityChart">
+            <canvas id="chart" style="width: 100%; height: 400px;"></canvas>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                try {
+                    const labels = {{ results|map(attribute=0)|map('string')|list|tojson }};
+                    const data = {{ results|map(attribute=2)|list|tojson }};
+                    
+                    console.log('Labels:', labels);
+                    console.log('Data:', data);
+                    
+                    if (data.length === 0) {
+                        console.error('No data available for the chart.');
+                        return;
+                    }
+
+                    // Render the chart
+                    const ctx = document.getElementById('chart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Cosine Similarity',
+                                data: data,
+                                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    ticks: { autoSkip: false },
+                                    title: { display: true, text: 'Document IDs' }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: 'Similarity Score' }
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            return `Score: ${tooltipItem.raw.toFixed(3)}`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error rendering chart:', error);
+                }
+            });
+        </script>
+    {% endif %}
+</body>
+</html>
